@@ -2,6 +2,7 @@ import asyncio
 import sys
 import logging
 
+from bot.apps.sendmessage.handlers import router as sendmessage_router
 from aiogram import Bot, Dispatcher
 
 
@@ -11,6 +12,7 @@ import bot.database.models
 from bot.middlewares.db import DbSessionMiddleware
 
 import config.settings as set
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,8 +28,9 @@ dp = Dispatcher()
 
 dp.update.middleware(DbSessionMiddleware())
 
-dp.include_router(start_router)
 
+dp.include_router(start_router)
+dp.include_router(sendmessage_router)
 
 async def init_db():
     async with engine.begin() as conn:

@@ -26,13 +26,17 @@ async def start(message: Message, session: AsyncSession):
                 chat_id=-1003878748753,
                 name=f"@{message.from_user.username}, {message.from_user.id}"
             )
-            
-            await message.answer(f"Топик создан! ID: {result.message_thread_id}\n"
+            await repo.set_topic_id(
+                telegram_id=message.from_user.id,
+                topic_id=result.message_thread_id)
+        
+            await message.bot.send_message(chat_id=-1003878748753,text=f"Топик создан! ID: {result.message_thread_id}\n"
                                   f"Имя пользователя:{message.from_user.username}\n"
                                   f"Id пользователя:{message.from_user.id}")
-        
         except BaseException as e: 
-            pass
+            print(f"error: {e}")
+        
 
-    await message.answer("start")
+        await message.answer("👋 Добро пожаловать в службу поддержки!")
+
 
