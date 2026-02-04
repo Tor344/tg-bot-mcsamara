@@ -17,6 +17,8 @@ from bot.database.repository import UserRepository
 router = Router()
 
 
+import config.settings
+
 @router.message(F.text)
 async def sendmessage(message: Message, session: AsyncSession):
     repo = UserRepository(session)
@@ -27,7 +29,7 @@ async def sendmessage(message: Message, session: AsyncSession):
     
     topic_id = await repo.get_topic_id_by_telegram_id(message.from_user.id)
     await message.bot.send_message(
-            chat_id=-1003878748753,
+            chat_id=config.settings.chat_id,
             message_thread_id=topic_id,
             text=f"{message.text}"
         )
@@ -78,7 +80,7 @@ async def handle_media_group(message: Message, session: AsyncSession):
         group["topic_id"] = None
     else:
   
-        group["chat_id"] = -1003878748753
+        group["chat_id"] = config.settings.chat_id
         group["topic_id"] = await repo.get_topic_id_by_telegram_id(
             message.from_user.id
         )
@@ -126,7 +128,7 @@ async def sendmessage(message: Message, session: AsyncSession):
         print(message.from_user.id)
         topic_id = await repo.get_topic_id_by_telegram_id(message.from_user.id)
         await message.bot.send_document(
-                chat_id=-1003878748753,
+                chat_id=config.settings.chat_id,
                 message_thread_id=topic_id,
                 document=document,
                 caption=f"👤 {message.from_user.full_name}:\n\n{caption}")
@@ -153,7 +155,7 @@ async def sendmessage(message: Message, session: AsyncSession):
         return
     topic_id = await repo.get_topic_id_by_telegram_id(message.from_user.id)
     await message.bot.send_video(
-            chat_id=-1003878748753,
+            chat_id=config.settings.chat_id,
             message_thread_id=topic_id,
             video=file_id,
             caption=f"{caption}")
@@ -171,7 +173,7 @@ async def sendmessage(message: Message, session: AsyncSession):
         return
     topic_id = await repo.get_topic_id_by_telegram_id(message.from_user.id)
     await message.bot.send_photo(
-            chat_id=-1003878748753,
+            chat_id=config.settings.chat_id,
             message_thread_id=topic_id,
             photo=file_id,
             caption=f"{caption}")
