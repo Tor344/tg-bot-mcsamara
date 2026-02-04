@@ -140,7 +140,25 @@ async def sendmessage(message: Message, session: AsyncSession):
 
 
 
+@router.message(F.video)
+async def sendmessage(message: Message, session: AsyncSession):
+    repo = UserRepository(session)
+    print("hello")
+    caption = message.caption if message.caption != None else "" 
+    video = message.video
+    file_id = video.file_id
+    if message.message_thread_id:
+        telegram_id = await repo.get_telegram_id_by_topic_id(message.message_thread_id)
+        await message.bot.send_video(chat_id=telegram_id, video=file_id, caption=caption)
+        return
+    topic_id = await repo.get_topic_id_by_telegram_id(message.from_user.id)
+    await message.bot.send_video(
+            chat_id=-1003878748753,
+            message_thread_id=topic_id,
+            video=file_id,
+            caption=f"{caption}")
     
+
 @router.message(F.photo)
 async def sendmessage(message: Message, session: AsyncSession):
     repo = UserRepository(session)
@@ -156,4 +174,4 @@ async def sendmessage(message: Message, session: AsyncSession):
             chat_id=-1003878748753,
             message_thread_id=topic_id,
             photo=file_id,
-            caption=f"👤 {message.from_user.full_name}:\n\n{caption}")
+            caption=f"{caption}")
