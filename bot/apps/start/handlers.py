@@ -37,6 +37,6 @@ async def start(message: Message, session: AsyncSession):
             print(f"error: {e}")
         
 
-        await message.answer("👋 Добро пожаловать в службу поддержки!")
+    await message.answer("👋 Добро пожаловать в службу поддержки!")
 
 
