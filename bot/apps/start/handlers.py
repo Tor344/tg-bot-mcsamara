@@ -9,7 +9,7 @@ from bot.apps.start.state_fms import *
 
 from bot.database.repository import UserRepository
 
-
+import config.settings
 router = Router()
 
 
@@ -23,14 +23,14 @@ async def start(message: Message, session: AsyncSession):
         try:
             # Создаем топик
             result = await message.bot.create_forum_topic(
-                chat_id=-1003878748753,
+                chat_id=config.settings.chat_id,
                 name=f"@{message.from_user.username}, {message.from_user.id}"
             )
             await repo.set_topic_id(
                 telegram_id=message.from_user.id,
                 topic_id=result.message_thread_id)
         
-            await message.bot.send_message(chat_id=-1003878748753,text=f"Топик создан! ID: {result.message_thread_id}\n"
+            await message.bot.send_message(chat_id=config.settings.chat_id,text=f"Топик создан! ID: {result.message_thread_id}\n"
                                   f"Имя пользователя:{message.from_user.username}\n"
                                   f"Id пользователя:{message.from_user.id}")
         except BaseException as e: 
